@@ -55,6 +55,11 @@
                 <a href="{{ route('admin.orders.index') }}" class="nav-link"><i class="fas fa-fire"></i><span>Orders</span></a>
 
             </li>
+
+            <li class="{{ setSidebarActive(['admin.email']) }}">
+                <a href="{{ route('admin.email') }}" class="nav-link"><i class="fas fa-fire"></i><span>Email</span></a>
+
+            </li>
         </ul>
     </aside>
 </div>

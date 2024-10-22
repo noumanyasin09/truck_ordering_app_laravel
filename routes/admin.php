@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth:admin'], 'prefix' => 'admin', 'as' => 'admi
 
     /** Dashboard Route */
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('email', [DashboardController::class, 'email'])->name('email');
+    Route::post('sendemail', [DashboardController::class, 'sendEmail'])->name('sendemail');
 
 
 });
