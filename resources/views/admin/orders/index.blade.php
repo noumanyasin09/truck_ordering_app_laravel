@@ -69,18 +69,9 @@
                                         <span class="badge bg-danger text-dark">Canceled</span>
                                     @endif
                                 </td>
-                                {{-- <td>
-                                    <div class="form-group">
-                                        <label class="custom-switch mt-2">
-                                          <input @checked($job->status === 'active') type="checkbox" data-id="{{ $job->id }}" name="custom-switch-checkbox" class="custom-switch-input post_status">
-                                          <span class="custom-switch-indicator"></span>
-                                        </label>
-                                      </div>
-                                </td> --}}
                                 <td>
-                                    {{-- <a href="{{ route('admin.jobs.edit', $job->id) }}" class="btn-sm btn btn-primary"><i class="fas fa-edit"></i></a> --}}
                                     <a href="{{ route('admin.order.edit', $order->id) }}" class="btn-sm btn btn-primary"><i class="fas fa-cog"></i></a>
-                                    <a href="" class="btn-sm btn btn-danger delete-item"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="{{ route('admin.order.delete', $order->id) }}" class="btn-sm btn btn-danger delete-item"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                         @empty

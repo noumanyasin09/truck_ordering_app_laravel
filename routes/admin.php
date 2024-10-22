@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth:admin'], 'prefix' => 'admin', 'as' => 'admi
     Route::get('orders', [OrdersController::class, 'index'])->name('orders.index');
     Route::get('order/edit/{id}', [OrdersController::class, 'edit'])->name('order.edit');
     Route::post('order-status/{id}', [OrdersController::class, 'changeStatus'])->name('order-status.update');
+    Route::delete('order/{id}', [OrdersController::class, 'destroy'])->name('order.delete');
 
     /** Dashboard Route */
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
