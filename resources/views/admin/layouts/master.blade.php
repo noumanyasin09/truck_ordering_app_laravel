@@ -119,9 +119,76 @@
         });
     </script>
 
+    <!-- Custom modal styles -->
+<style>
+    #notificationModal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .modal-content button {
+        margin-top: 10px;
+    }
+</style>
+
+    <!-- Custom modal HTML -->
+    <div class="row">
+        <div class="col-md-6">
+            <div id="notificationModal">
+                <div class="modal-content">
+                    <h3 id="notificationMessage"></h3>
+                    <button class="btn btn-info" id="viewOrdersBtn">View Orders</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/laravel-echo@latest/dist/echo.iife.js"></script>
+
 <script>
+    // Initialize Pusher and Laravel Echo
+    window.Pusher = Pusher; // Already available from the included script
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: '{{ env('PUSHER_APP_KEY') }}',
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+        encrypted: true,
+        forceTLS: true
+    });
+
+    // Listen for order notifications
+    window.Echo.channel('orders')
+        .listen('.send.notification', (e) => {
+            console.log('New notification received:', e.notification);
+            // Show custom modal
+            document.getElementById('notificationMessage').innerText = `${e.notification.message} by user ${e.notification.user_name}!`;
+            document.getElementById('notificationModal').style.display = 'flex';
+
+            // Redirect to the orders page when button is clicked
+            document.getElementById('viewOrdersBtn').onclick = function() {
+                window.location.href = "{{ route('admin.orders.index') }}"; // Replace with your route
+            };
+        });
+</script>
+{{-- <script>
     // Initialize Pusher and Laravel Echo
     window.Pusher = Pusher; // Already available from the included script
 
@@ -143,7 +210,7 @@
                 window.location.href = "{{ route('admin.orders.index') }}"; // Replace with your route
             }
         });
-</script>
+</script> --}}
 
 </body>
 

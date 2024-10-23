@@ -1,10 +1,13 @@
 <?php
 
 use App\Events\SendNotification;
+use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +25,6 @@ Route::get('/notify', function(){
     return view('pusher');
 });
 
-Route::get('sendpusher', [TestController::class,'sendpusher']);
+Route::get('/', [DashboardController::class,'index']);
+
+

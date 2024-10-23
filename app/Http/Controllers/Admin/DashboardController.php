@@ -21,8 +21,11 @@ class DashboardController extends Controller
         // $this->middleware(['permission:'])
     }
 
-    function index(): View
+    function index()
     {
+        if (!auth()->check()) {
+            return redirect()->route('admin.login');
+        }
         $totalOrders = Order::count();
         $totalUsers = User::count();
         $deliveredRequests = Order::where('status', '=', 'delivered')->count();

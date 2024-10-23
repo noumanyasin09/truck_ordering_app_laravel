@@ -25,6 +25,7 @@
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <tr>
+                            <th>User Name</th>
                             <th>Pickup Location</th>
                             <th>Delivery Location</th>
                             <th>Size</th>
@@ -33,12 +34,14 @@
                             <th>Delivery Time</th>
                             <th>Status</th>
 
-                            <th style="width: 10%">Action</th>
+                            <th style="width: 20%">Action</th>
                         </tr>
                     <tbody>
                         @forelse ($orders as $order)
                             <tr>
+                                <td>{{ $order->user->name }}</td>
                                 <td>
+
                                     <div class="d-flex">
                                         <div>
                                             <span>{{ $order->pickup_location }}</span>
