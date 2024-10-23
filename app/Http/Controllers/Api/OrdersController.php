@@ -24,7 +24,7 @@ class OrdersController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $order = Order::create([

@@ -25,8 +25,8 @@ class AuthController extends BaseController
             'c_password' => 'required|same:password',
         ]);
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $input = $request->all();
@@ -36,8 +36,8 @@ class AuthController extends BaseController
         $success['name'] =  $user->name;
 
         $response = [
-            'status'=> 200,
-            'data'=> $success
+            'status' => 200,
+            'data' => $success
         ];
         return response()->json($response);
     }
@@ -49,34 +49,32 @@ class AuthController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        $user = User::where('email', $request->email)->first();
-        if(!empty($user)){
-            if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-                $user = Auth::user();
-                $success['token'] =  $user->createToken('Truck_Ordering_app')->plainTextToken;
-                $success['name'] =  $user->name;
+        // Validate the request data
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255|exists:users,email',  // Ensure email exists in users table
+            'password' => 'required|string',  // Password is required
+        ]);
 
-                $response = [
-                    'status'=> 200,
-                    'data'=> $success
-                ];
-                return response()->json($response);
-            }
-            else{
-                $response = [
-                    'status'=> 404,
-                    'message'=> 'Invalid Credentials'
-                ];
-                return response()->json($response);
-            }
-        }else{
-            $response = [
-                'status'=> 203,
-                'message'=> 'User not found'
-            ];
-            return response()->json($response);
+        // Return validation errors if validation fails
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        // Attempt to log the user in
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+            $success['token'] = $user->createToken('Truck_Ordering_app')->plainTextToken;
+            $success['name'] = $user->name;
+
+            // Successful login response
+            return response()->json([
+                'status' => 200,
+                'data' => $success
+            ]);
+        } else {
+            // If authentication fails
+            return response()->json(['errors' => ['general' => 'Invalid credentials. Please try again.']], 401);
+        }
     }
 
     public function logout(Request $request)
@@ -90,14 +88,14 @@ class AuthController extends BaseController
         // Check if the user is authenticated
         if (!$request->user()) {
             $response = [
-                'status'=> 203,
-                'message'=> 'User not found'
+                'status' => 203,
+                'message' => 'User not found'
             ];
             return response()->json($response);
         }
         $response = [
-            'status'=> 200,
-            'data'=> $request->user()
+            'status' => 200,
+            'data' => $request->user()
         ];
         return response()->json($response);
     }
